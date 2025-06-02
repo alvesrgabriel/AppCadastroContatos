@@ -4,18 +4,28 @@ import { Alert } from 'react-native';
 // Função para buscar os contatos
 export const fetchContatos = async (setRegistros) => {
   try {
-    console.log('Tentando buscar contatos da API:', API_URL);
+    console.log('Iniciando requisição para:', API_URL);
+    console.log('Método: GET');
+    
     const response = await fetch(API_URL);
+    console.log('Status da resposta:', response.status);
+    console.log('Headers da resposta:', response.headers);
+    
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Resposta da API:', errorText);
+      console.error('Erro na resposta da API - Status:', response.status);
+      console.error('Corpo da resposta de erro:', errorText);
       throw new Error(`Erro ao buscar contatos: ${response.status} - ${errorText}`);
     }
+    
     const result = await response.json();
-    console.log('Dados recebidos:', result);
+    console.log('Dados recebidos com sucesso:', result);
     setRegistros(result.data);
   } catch (error) {
-    console.error('Erro detalhado:', error);
+    console.error('Erro completo:', error);
+    console.error('Nome do erro:', error.name);
+    console.error('Mensagem do erro:', error.message);
+    console.error('Stack trace:', error.stack);
     Alert.alert('Erro', `Não foi possível carregar os contatos: ${error.message}`);
     throw error;
   }
