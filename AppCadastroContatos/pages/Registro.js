@@ -1,96 +1,49 @@
-// import React, { useState } from 'react';
-// import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-// import { auth, db } from './Firebase';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from './Firebase';
 
-// const RegistroScreen = ({ navigation }) => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [name, setName] = useState('');
-//   const [bio, setBio] = useState('');
+const RegistroScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
 
-//   const handleRegister = async () => {
-//     try {
-//       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
-//       const user = userCredential.user;
+  const handleRegister = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-//       // Salvar nome e bio no Firestore
-//       await db.collection('users').doc(user.uid).set({
-//         name,
-//         bio
-//       });
+      // Salvar nome e bio no Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        name,
+        bio
+      });
 
-//       Alert.alert('Sucesso! 🎉', 'Usuário cadastrado com sucesso!', [
-//         { text: 'OK', onPress: () => navigation.replace('Home') }
-//       ]);
-//     } catch (err) {
-//       Alert.alert('Erro', 'Não foi possível cadastrar. Tente novamente.');
-//     }
-//   };
+      Alert.alert('Sucesso! 🎉', 'Usuário cadastrado com sucesso!', [
+        { text: 'OK', onPress: () => navigation.replace('Home') }
+      ]);
+    } catch (err) {
+      Alert.alert('Erro', 'Não foi possível cadastrar. Tente novamente.');
+    }
+  };
 
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Cadastro</Text>
-//       <TextInput 
-//         style={styles.input} 
-//         placeholder="Nome" 
-//         value={name} 
-//         onChangeText={setName}
-//       />
-//       <TextInput 
-//         style={styles.input} 
-//         placeholder="Bio" 
-//         value={bio} 
-//         onChangeText={setBio}
-//       />
-//       <TextInput 
-//         style={styles.input} 
-//         placeholder="Email" 
-//         value={email} 
-//         onChangeText={setEmail}
-//         keyboardType="email-address"
-//         autoCapitalize="none"
-//       />
-//       <TextInput 
-//         style={styles.input} 
-//         placeholder="Senha" 
-//         secureTextEntry 
-//         value={password} 
-//         onChangeText={setPassword}
-//       />
-//       <View style={styles.buttonContainer}>
-//         <Button title="Cadastrar" onPress={handleRegister} />
-//         <Button title="Voltar" onPress={() => navigation.goBack()} color="#666" />
-//       </View>
-//     </View>
-//   );
-// };
+  return (
+    <View style={styles.container}>
+      <Text>Cadastro</Text>
+      <TextInput style={styles.input} placeholder="Nome" value={name} onChangeText={setName} />
+      <TextInput style={styles.input} placeholder="Bio" value={bio} onChangeText={setBio} />
+      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
+      <TextInput style={styles.input} placeholder="Senha" secureTextEntry value={password} onChangeText={setPassword} />
+      <Button title="Cadastrar" onPress={handleRegister} />
+    </View>
+  );
+};
 
-// const styles = StyleSheet.create({
-//   container: { 
-//     flex: 1, 
-//     justifyContent: 'center', 
-//     alignItems: 'center',
-//     padding: 20,
-//     backgroundColor: '#fff'
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20
-//   },
-//   input: { 
-//     width: '100%', 
-//     padding: 15, 
-//     borderWidth: 1, 
-//     marginVertical: 8,
-//     borderRadius: 5,
-//     borderColor: '#ddd'
-//   },
-//   buttonContainer: {
-//     width: '100%',
-//     gap: 10,
-//     marginTop: 10
-//   }
-// });
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  input: { width: '80%', padding: 10, borderWidth: 1, marginVertical: 5 },
+});
 
-// export default RegistroScreen;
+export default RegistroScreen;

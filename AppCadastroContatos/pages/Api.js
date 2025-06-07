@@ -1,4 +1,4 @@
-const API_URL = 'http://10.0.2.2:8000/api/contato';
+const API_URL = 'https://webapptech.site/apicontatos/api/';
 import { Alert } from 'react-native';
 
 // Função para buscar os contatos

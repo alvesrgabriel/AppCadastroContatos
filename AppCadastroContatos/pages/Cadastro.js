@@ -83,10 +83,7 @@ export default function Cadastro({ navigation }) {
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={[styles.button, styles.cancelButton]} 
-          onPress={() => navigation.navigate('Home')}
-        >
+        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => navigation.navigate('Home')}>
           <Icon name="times" size={20} color="#FFF" style={styles.icon} />
           <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
@@ -98,21 +95,21 @@ export default function Cadastro({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f1f1f1',
   },
   header: {
-    flexDirection: 'row',
+    backgroundColor: '#C170FF',
+    padding: 20,
     alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
     justifyContent: 'center',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#ffffff',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   form: {
     padding: 20,
@@ -120,16 +117,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#C170FF',
     marginBottom: 8,
+    alignSelf: 'flex-start',
   },
   input: {
     height: 50,
-    backgroundColor: '#FFF',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#f1f1f1',
     marginBottom: 20,
     fontSize: 16,
     shadowColor: '#000',
@@ -137,17 +135,17 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 2,
   },
   button: {
     height: 50,
     borderRadius: 10,
+    marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -158,13 +156,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   submitButton: {
-    backgroundColor: '#2ecc71',
+    backgroundColor: '#C170FF',
   },
   cancelButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: '#FF97EE',
   },
   buttonText: {
-    color: '#FFF',
+    color: '#ffffff',
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 10,

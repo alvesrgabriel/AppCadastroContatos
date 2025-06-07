@@ -46,7 +46,7 @@ export default function Home({ navigation }) {
           style={styles.profileButton}
           onPress={() => navigation.navigate('Perfil')}
         >
-          <Icon name="user" size={24} color="#333" />
+          <Icon name="user" size={24} color="#ffffff" />
         </TouchableOpacity>
       </View>
 
@@ -105,29 +105,25 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f1f1f1',
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: '#C170FF',
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
+    color: '#ffffff',
   },
   listContainer: {
     padding: 15,
   },
   itemContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     marginBottom: 15,
     shadowColor: '#000',
@@ -143,7 +139,7 @@ const styles = StyleSheet.create({
   itemHeader: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#f1f1f1',
   },
   contactInfo: {
     marginBottom: 15,
@@ -151,7 +147,7 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#C170FF',
     marginBottom: 5,
   },
   contactDetails: {
@@ -186,25 +182,24 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   deleteButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: '#FF97EE',
   },
   editButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#C170FF',
   },
   buttonText: {
-    color: '#fff',
+    color: '#ffffff',
     fontWeight: '600',
     fontSize: 14,
     marginLeft: 5,
   },
   itemFooter: {
-    padding: 12,
-    backgroundColor: '#fafafa',
+    padding: 15,
+    backgroundColor: '#f1f1f1',
   },
   dateText: {
-    color: '#666',
     fontSize: 12,
-    marginBottom: 2,
+    color: '#666',
   },
   floatingButton: {
     position: 'absolute',
@@ -213,36 +208,20 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#2ecc71',
-    alignItems: 'center',
+    backgroundColor: '#C170FF',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
-  },
-  profileButton: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.22,
-    elevation: 3,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  profileButton: {
+    padding: 10,
   },
 });
  
