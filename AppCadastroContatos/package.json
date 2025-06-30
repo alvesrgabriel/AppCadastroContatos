@@ -22,6 +22,7 @@
     "expo-status-bar": "^2.2.3",
     "firebase": "^11.9.0",
     "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-native": "^0.79.2",
     "react-native-dynamic-vector-icons": "^2.0.0",
     "react-native-floating-action-button": "^0.2.2",

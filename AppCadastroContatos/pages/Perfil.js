@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TextInput, Button, Alert, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { auth } from './Firebase';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -54,7 +63,7 @@ const PerfilScreen = () => {
         quality: 1,
         base64: true,
       });
-      
+
       if (!result.canceled) {
         const base64Img = `data:image/jpg;base64,${result.assets[0].base64}`;
         // Dados para o Cloudinary
@@ -63,27 +72,32 @@ const PerfilScreen = () => {
           upload_preset: 'preset_publico',
           cloud_name: 'dgsffmd9f',
         };
-        
-        const res = await fetch('https://api.cloudinary.com/v1_1/dgsffmd9f/image/upload', {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-        
+
+        const res = await fetch(
+          'https://api.cloudinary.com/v1_1/dgsffmd9f/image/upload',
+          {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+
         const json = await res.json();
-  
+
         if (json.secure_url) {
           const user = auth.currentUser;
           await updateDoc(doc(db, 'users', user.uid), {
             photoURL: json.secure_url,
           });
-          // Atualiza os dados do usuário localmente
           setUserData(prev => ({ ...prev, photoURL: json.secure_url }));
           Alert.alert('Sucesso', 'Foto de perfil atualizada!');
         } else {
-          Alert.alert('Erro', 'Erro ao enviar imagem. Verifique se o preset está correto.');
+          Alert.alert(
+            'Erro',
+            'Erro ao enviar imagem. Verifique se o preset está correto.'
+          );
         }
       }
     } catch (error) {
@@ -95,21 +109,22 @@ const PerfilScreen = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#C170FF" />
       ) : userData ? (
         <>
           <Text style={styles.title}>Perfil do Usuário</Text>
-          
-          {/* Exibe a foto se existir */}
+
           {userData.photoURL ? (
-            <Image
-              source={{ uri: userData.photoURL }}
-              style={styles.profileImage}
-            />
+            <Image source={{ uri: userData.photoURL }} style={styles.profileImage} />
           ) : (
-            <Text style={styles.info}>Nenhuma foto cadastrada.</Text>
+            <View style={[styles.profileImage, styles.noPhoto]}>
+              <Text style={styles.noPhotoText}>Sem foto</Text>
+            </View>
           )}
-          <Button title="Editar Foto de Perfil" onPress={pickImageAndUpload} />
+
+          <TouchableOpacity style={styles.button} onPress={pickImageAndUpload}>
+            <Text style={styles.buttonText}>Editar Foto de Perfil</Text>
+          </TouchableOpacity>
 
           {isEditing ? (
             <>
@@ -118,59 +133,133 @@ const PerfilScreen = () => {
                 value={name}
                 onChangeText={setName}
                 placeholder="Nome"
+                placeholderTextColor="#999"
               />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { height: 80 }]}
                 value={bio}
                 onChangeText={setBio}
                 placeholder="Bio"
+                placeholderTextColor="#999"
+                multiline
               />
-              <Button title="Salvar" onPress={handleSave} />
-              <Button title="Cancelar" onPress={() => setIsEditing(false)} color="#888" />
+
+              <View style={styles.buttonRow}>
+                <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSave}>
+                  <Text style={styles.buttonText}>Salvar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => setIsEditing(false)}
+                >
+                  <Text style={[styles.buttonText, { color: '#555' }]}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </>
           ) : (
             <>
               <Text style={styles.info}>Nome: {userData.name}</Text>
               <Text style={styles.info}>Bio: {userData.bio}</Text>
-              <Button title="Editar" onPress={() => setIsEditing(true)} />
+
+              <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+                <Text style={styles.buttonText}>Editar</Text>
+              </TouchableOpacity>
             </>
           )}
         </>
       ) : (
-        <Text>Usuário não encontrado.</Text>
+        <Text style={styles.info}>Usuário não encontrado.</Text>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: 20 
+  container: {
+    flex: 1,
+    backgroundColor: '#f1f1f1',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  title: { 
-    fontSize: 24, 
-    fontWeight: 'bold', 
-    marginBottom: 10 
-  },
-  info: { 
-    fontSize: 18, 
-    marginBottom: 5 
-  },
-  input: {
-    width: '100%',
-    borderWidth: 1,
-    padding: 10,
-    marginVertical: 5,
-    fontSize: 16,
-    borderRadius: 5,
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#C170FF',
+    marginBottom: 20,
   },
   profileImage: {
     width: 120,
     height: 120,
     borderRadius: 60,
+    marginBottom: 15,
+    backgroundColor: '#ddd',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noPhoto: {
+    backgroundColor: '#eee',
+  },
+  noPhotoText: {
+    color: '#888',
+    fontSize: 16,
+  },
+  info: {
+    fontSize: 18,
+    color: '#444',
+    marginBottom: 10,
+    width: '100%',
+  },
+  input: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#C170FF',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+    color: '#333',
+  },
+  button: {
+    backgroundColor: '#C170FF',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginVertical: 5,
+    shadowColor: '#C170FF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '100%',
+  },
+  saveButton: {
+    flex: 1,
+    marginRight: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#eee',
+    shadowColor: 'transparent',
+    elevation: 0,
+    flex: 1,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    width: '100%',
     marginBottom: 10,
   },
 });

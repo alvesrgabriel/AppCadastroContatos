@@ -1,4 +1,4 @@
-const API_URL = 'https://webapptech.site/apicontatos/api/';
+const API_URL = 'https://webapptech.site/apicontatos/api';
 import { Alert } from 'react-native';
 
 // Função para buscar os contatos
@@ -47,13 +47,15 @@ export const createContato = async (contatoData) => {
     }
 
     const textResponse = await response.text();
+console.log('Resposta bruta da API:', textResponse); // 👈 aqui
+
     let responseData;
     try {
-      responseData = JSON.parse(textResponse);
-    } catch (error) {
-      console.warn('A resposta não é um JSON válido:', textResponse);
-      throw new Error('Erro ao processar resposta da API');
-    }
+  responseData = JSON.parse(textResponse);
+} catch (error) {
+  console.warn('A resposta não é um JSON válido:', textResponse);
+  throw new Error('Erro ao processar resposta da API');
+}
 
     if (!responseData) {
       throw new Error('Resposta vazia da API');
