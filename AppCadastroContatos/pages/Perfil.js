@@ -55,56 +55,52 @@ const PerfilScreen = () => {
     }
   };
 
-  const pickImageAndUpload = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-        base64: true,
+const pickImageAndUpload = async () => {
+  try {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      const base64Img = `data:image/jpg;base64,${result.assets[0].base64}`;
+
+      // Dados para o Cloudinary
+      const data = {
+        file: base64Img,
+        upload_preset: 'preset_publico', // nome do preset
+        cloud_name: 'dhq2o20io'          // seu cloud_name
+      };
+
+      const res = await fetch('https://api.cloudinary.com/v1_1/dhq2o20io/image/upload', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
-      if (!result.canceled) {
-        const base64Img = `data:image/jpg;base64,${result.assets[0].base64}`;
-        // Dados para o Cloudinary
-        const data = {
-          file: base64Img,
-          upload_preset: 'preset_publico',
-          cloud_name: 'dgsffmd9f',
-        };
+      const json = await res.json();
 
-        const res = await fetch(
-          'https://api.cloudinary.com/v1_1/dgsffmd9f/image/upload',
-          {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-
-        const json = await res.json();
-
-        if (json.secure_url) {
-          const user = auth.currentUser;
-          await updateDoc(doc(db, 'users', user.uid), {
-            photoURL: json.secure_url,
-          });
-          setUserData(prev => ({ ...prev, photoURL: json.secure_url }));
-          Alert.alert('Sucesso', 'Foto de perfil atualizada!');
-        } else {
-          Alert.alert(
-            'Erro',
-            'Erro ao enviar imagem. Verifique se o preset está correto.'
-          );
-        }
+      if (json.secure_url) {
+        const user = auth.currentUser;
+        await updateDoc(doc(db, 'users', user.uid), {
+          photoURL: json.secure_url,
+        });
+        setUserData(prev => ({ ...prev, photoURL: json.secure_url }));
+        Alert.alert('Sucesso', 'Foto de perfil atualizada!');
+      } else {
+        Alert.alert('Erro', 'Erro ao enviar imagem. Verifique se o preset está correto.');
       }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Algo deu errado ao tentar fazer o upload.');
     }
-  };
+  } catch (error) {
+    console.error(error);
+    Alert.alert('Erro', 'Algo deu errado ao tentar fazer o upload.');
+  }
+};
+
 
   return (
     <View style={styles.container}>
